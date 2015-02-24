@@ -1,8 +1,10 @@
 EitherSwift
 ===========
 
+[![Build Status](https://travis-ci.org/to4iki/EitherSwift.svg)][status]
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
 
+[status]: https://travis-ci.org/to4iki/EitherSwift
 [license]: https://github.com/to4iki/EitherSwift/master/LICENSE
 
 Represents a value of one of two possible types (a disjoint union.)  
