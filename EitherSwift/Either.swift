@@ -9,7 +9,7 @@
 /**
 *  A reference type that has a value type
 */
-public class EitherContainer<X> {
+public class EitherBox<X> {
     public let value: X
     
     init(_ value: X) {
@@ -25,37 +25,34 @@ public enum Either<A, B> {
     typealias Failure = A
     typealias Success = B
     
-    case Left(EitherContainer<A>)
-    case Right(EitherContainer<B>)
+    case Left(EitherBox<A>)
+    case Right(EitherBox<B>)
     
     public init(left: A) {
-        self = .Left(EitherContainer<A>(left))
+        self = .Left(EitherBox(left))
     }
     
     public init(right: B) {
-        self = .Right(EitherContainer<B>(right))
+        self = .Right(EitherBox(right))
     }
     
     /// Projects this `Either` as a `Left`.
-    public var left: LeftProjection<A, B> { return LeftProjection<A, B>(e: self) }
+    public var left: LeftProjection<A, B> { return LeftProjection(e: self) }
     
     /// Projects this `Either` as a `Right`.
-    public var right: RightProjection<A, B> { return RightProjection<A, B>(e: self) }
+    public var right: RightProjection<A, B> { return RightProjection(e: self) }
     
     /// Returns `true` if this is a `Left`, `false` otherwise.
     public var isLeft: Bool {
         switch self {
-        case .Left(_): return true
-        case .Right(_): return false
+        case .Left: return true
+        case .Right: return false
         }
     }
     
     /// Returns `true` if this is a `Right`, `false` otherwise.
     public var isRight: Bool {
-        switch self {
-        case .Left(_): return false
-        case .Right(_): return true
-        }
+        return !isLeft
     }
     
     /**
@@ -83,10 +80,24 @@ public enum Either<A, B> {
         }
     }
     
-    /**
-    Returns the given argument if `Left` or self if `Right`.
+    /**.
+    Returns the given argument if `Success` or `Failure` value.
+    like Optional Chaining.
     
-    :param: f The function to bind across `Left`.
+    :param: f The function to bind across `Success`.
+    */
+    public func chain<X>(f: (Success) -> Either<Failure, X>)  -> Either<Failure, X> {
+        switch self {
+        case .Left(let l): return Either<Failure, X>(left: l.value)
+        case .Right(let r): return f(r.value)
+        }
+    }
+    
+    /**
+    Returns the given argument if `Failure` or self if `Success`.
+    like null Coalescing Operator.
+    
+    :param: f The function to bind across `Failure`.
     */
     public func fallback(f: () -> Either<Failure, Success>) -> Either<Failure, Success> {
         switch self {
@@ -112,6 +123,16 @@ extension Either: Printable {
         case .Right(let r): return "Either<A, B>(right: \(r.value))"
         }
     }
+}
+
+// fallback Operator Either<Failure, Success>
+public func ?? <Failure, Success>(left: Either<Failure, Success>, right: @autoclosure () ->  Either<Failure, Success>) -> Either<Failure, Success> {
+    return left.fallback(right)
+}
+
+// fallback Operator RawValue
+public func ?? <Failure, Success>(left: Either<Failure, Success>, right: @autoclosure () ->  Success) -> Either<Failure, Success> {
+    return left.fallback { Either(right: right()) }
 }
 
 /**
@@ -167,7 +188,7 @@ public struct LeftProjection<A, B> {
     Maps the function argument through `Left`.
     */
     public func map<X>(f: A -> X) -> Either<X, B> {
-        return e.fold({ a in Either<X, B>(left: f(a)) }, { Either<X, B>(right: $0) })
+        return e.fold({ a in Either(left: f(a)) }, { Either(right: $0) })
     }
     
     /**
@@ -176,7 +197,7 @@ public struct LeftProjection<A, B> {
     :param: f The function to bind across `Left`.
     */
     public func flatMap<X>(f: A -> Either<X, B>) -> Either<X, B> {
-        return e.fold({ f($0) }, { Either<X, B>(right: $0) })
+        return e.fold({ f($0) }, { Either(right: $0) })
     }
     
     /**
@@ -184,7 +205,7 @@ public struct LeftProjection<A, B> {
     `p` does not hold for the left value, otherwise, returns a `Left`.
     */
     public func filter(p: A -> Bool) -> Either<A, B>? {
-        return e.fold({ p($0) ? Either<A, B>(left: $0) : nil }, { _ in nil} )
+        return e.fold({ p($0) ? Either(left: $0) : nil }, { _ in nil} )
     }
     
     /**
@@ -249,7 +270,7 @@ public struct RightProjection<A, B> {
     The given function is applied if this is a `Right`.
     */
     public func map<X>(f: B -> X) -> Either<A, X> {
-        return e.fold({ Either<A, X>(left: $0) }, { b in Either<A, X>(right: f(b)) })
+        return e.fold({ Either(left: $0) }, { b in Either(right: f(b)) })
     }
     
     /**
@@ -258,7 +279,7 @@ public struct RightProjection<A, B> {
     :param: f The function to bind across `Right`.
     */
     public func flatMap<X>(f: B -> Either<A, X>) -> Either<A, X> {
-        return e.fold({ Either<A, X>(left: $0) }, { f($0) })
+        return e.fold({ Either(left: $0) }, { f($0) })
     }
     
     /**
@@ -266,7 +287,7 @@ public struct RightProjection<A, B> {
     `p` does not hold for the right value, otherwise, returns a `Right`.
     */
     public func filter(p: B -> Bool) -> Either<A, B>? {
-        return e.fold({ _ in nil }, { p($0) ? Either<A, B>(right: $0) : nil })
+        return e.fold({ _ in nil }, { p($0) ? Either(right: $0) : nil })
     }
     
     /**
@@ -281,13 +302,13 @@ public struct RightProjection<A, B> {
 /**
 left.getOrElse Operator
 */
-public func ??<A, B>(left: LeftProjection<A, B>, right: @autoclosure () -> A) -> A {
+public func ?? <A, B>(left: LeftProjection<A, B>, right: @autoclosure () -> A) -> A {
     return left.getOrElse(right)
 }
 
 /**
 right.getOrElse Operator
 */
-public func ??<A, B>(right: RightProjection<A, B>, left: @autoclosure () -> B) -> B {
+public func ?? <A, B>(right: RightProjection<A, B>, left: @autoclosure () -> B) -> B {
     return right.getOrElse(left)
 }

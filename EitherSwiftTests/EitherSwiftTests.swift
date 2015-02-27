@@ -63,14 +63,52 @@ class EitherSwiftTests: XCTestCase {
         XCTAssertEqual(es.right.get, 12)
     }
     
-    func testFallback() {
-        let e1 = Helper.try(false, "left").fallback { Helper.try(true, "right") }
-        XCTAssert(e1.left.toOption() == nil)
-        XCTAssertEqual(e1.right.get, "right")
+    func testChain() {
+        let e1 = Helper.try(false, "f").chain { (s: String) -> Either<Error, String> in
+            return Either(right: "\(s) value")
+        }
+        XCTAssertEqual(e1.left.get.reason, "f")
+        XCTAssert(e1.right.toOption() == nil)
         
-        let e2 = Helper.try(true, "right").fallback { Helper.try(true, "right2") }
+        let e2 = Helper.try(true, "s").chain { (s: String) -> Either<Error, String> in
+            return Either(right: "\(s) value")
+        }
         XCTAssert(e2.left.toOption() == nil)
-        XCTAssertEqual(e2.right.get, "right")
+        XCTAssertEqual(e2.right.get, "s value")
+    }
+    
+    func testFallback() {
+        let e1 = Helper.try(false, "f").fallback { Helper.try(true, "s") }
+        XCTAssert(e1.left.toOption() == nil)
+        XCTAssertEqual(e1.right.get, "s")
+        
+        let e2 = Helper.try(true, "s").fallback { Helper.try(true, "s2") }
+        XCTAssert(e2.left.toOption() == nil)
+        XCTAssertEqual(e2.right.get, "s")
+    }
+    
+    func testFallbackOperator() {
+        let e1 = Helper.try(false, "f") ?? Helper.try(true, "s")
+        XCTAssert(e1.left.toOption() == nil)
+        XCTAssertEqual(e1.right.get, "s")
+        
+        let e2 = Helper.try(true, "s") ?? Helper.try(true, "s2")
+        XCTAssert(e2.left.toOption() == nil)
+        XCTAssertEqual(e2.right.get, "s")
+        
+        let e3 = Helper.try(false, "f1") ?? Helper.try(false, "f2") ?? Helper.try(true, "s")
+        XCTAssert(e3.left.toOption() == nil)
+        XCTAssertEqual(e3.right.get, "s")
+    }
+    
+    func testFallbackOperatorWithRawValue() {
+        let e1 = Helper.try(false, "f") ?? "s"
+        XCTAssert(e1.left.toOption() == nil)
+        XCTAssertEqual(e1.right.get, "s")
+        
+        let e2 = Helper.try(true, "s") ?? "s2"
+        XCTAssert(e2.left.toOption() == nil)
+        XCTAssertEqual(e2.right.get, "s")
     }
     
     func testCond() {

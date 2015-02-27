@@ -69,9 +69,21 @@ result.fold(
     { (i: Int) -> String  in "right"}
 ) // right
 
-// fallack
+// chain
+// Like null Coalescing Operator
+result.chain { (i: Int) -> Either<Error, Int> in
+    Either(right: i * i) 
+} // .Right(4)
+parseInt("a").chain { (i: Int) -> Either<Error, Int> in 
+    Either(right: i * i)
+} //.Left("parse error")
+
+// fallback(??)
+// Like Optional Chaining
 result.fallback { Either(right: 0) } // .Right(2)
 parseInt("a").fallback { Either(right: 0) } // .Right(0)
+parseInt("a") ?? parseInt("b") ?? parseInt("3") // .Right(3)
+parseInt("a") ?? 1 // .Right(1)
 ```
 
 ## Methods
@@ -84,6 +96,7 @@ typealias Success = B
 - Instance Methods
     - `fold<X>(fa: A -> X, _ fb: B -> X) -> X`
     - `swap() -> Either<B, A> `
+    - `chain<X>(f: (Success) -> Either<Failure, X>)  -> Either<Failure, X>`
     - `fallback(f: () -> Either<Failure, Success>) -> Either<Failure, Success>`
 - Class Methods
     - `cond<A, B>(test: Bool, right: () -> B, left: () -> A) -> Either<A, B>`
