@@ -137,7 +137,7 @@ typealias Success = B
 ### CocoaPods
 
 ```ruby
-pod 'EitherSwift', '~> 0.0.1'
+pod 'EitherSwift'
 ```
 
 ## Licence
