@@ -11,6 +11,7 @@
 		4D4DB78F1A9CE97A0078DECE /* EitherSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4DB7831A9CE97A0078DECE /* EitherSwift.framework */; };
 		4D4DB7961A9CE97A0078DECE /* EitherSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */; };
 		4D4DB7A01A9CE98C0078DECE /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4DB79F1A9CE98C0078DECE /* Either.swift */; };
+		4DCCE3F91AB7041E002A3156 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCCE3F81AB7041E002A3156 /* Box.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		4D4DB7941A9CE97A0078DECE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EitherSwiftTests.swift; sourceTree = "<group>"; };
 		4D4DB79F1A9CE98C0078DECE /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
+		4DCCE3F81AB7041E002A3156 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				4D4DB7881A9CE97A0078DECE /* EitherSwift.h */,
+				4DCCE3F81AB7041E002A3156 /* Box.swift */,
 				4D4DB79F1A9CE98C0078DECE /* Either.swift */,
 				4D4DB7861A9CE97A0078DECE /* Supporting Files */,
 			);
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4DB7A01A9CE98C0078DECE /* Either.swift in Sources */,
+				4DCCE3F91AB7041E002A3156 /* Box.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +406,7 @@
 				4D4DB79B1A9CE97A0078DECE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4D4DB79C1A9CE97A0078DECE /* Build configuration list for PBXNativeTarget "EitherSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -410,6 +415,7 @@
 				4D4DB79E1A9CE97A0078DECE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

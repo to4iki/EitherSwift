@@ -19,7 +19,7 @@ class EitherSwiftTests: XCTestCase {
     
     struct Helper {
         static func try(success: Bool, _ message: String) -> Either<Error, String> {
-            return success ? Either(right: message) : Either(left: Error(message))
+            return success ? right(message) : left(Error(message))
         }
     }
     
@@ -33,15 +33,19 @@ class EitherSwiftTests: XCTestCase {
     
     func testLeft() {
         switch Either<Error, String>(left: Error("left")) {
-        case .Left(let l): XCTAssertEqual(l.value.reason, "left")
-        case .Right(let r): XCTAssert(false, "not reached")
+        case .Left(let l):
+            XCTAssertEqual(l.unbox.reason, "left")
+        case .Right:
+            XCTAssert(false, "not reached")
         }
     }
     
     func testRight() {
         switch Either<Error, String>(right: "right") {
-        case .Left(let l): XCTAssert(false, "not reached")
-        case .Right(let r): XCTAssertEqual(r.value, "right")
+        case .Left:
+            XCTAssert(false, "not reached")
+        case .Right(let r):
+            XCTAssertEqual(r.unbox, "right")
         }
     }
     
@@ -119,6 +123,33 @@ class EitherSwiftTests: XCTestCase {
         let e2 = Either<Error, String>.cond(true, right: { _ in "right" }, left: { _ in Error("left") })
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "right")
+    }
+    
+    func testRightEquality() {
+        let e1: Either<NSError, String> = right("either")
+        let e2: Either<NSError, String> = right("either")
+        XCTAssert(e1 == e2)
+    }
+    
+    func testLeftEquality() {
+        let err = NSError(domain: "", code: 0, userInfo: nil)
+        let e1: Either<NSError, String> = left(err)
+        let e2: Either<NSError, String> = left(err)
+        XCTAssert(e1 == e2)
+    }
+    
+    func testRightInequality() {
+        let e1: Either<NSError, String> = right("either")
+        let e2: Either<NSError, String> = right("different either")
+        XCTAssert(e1 != e2)
+    }
+    
+    func testLeftInequality() {
+        let err = NSError(domain: "", code: 0, userInfo: nil)
+        let err2 = NSError(domain: "", code: 1, userInfo: nil)
+        let e1: Either<NSError, String> = left(err)
+        let e2: Either<NSError, String> = left(err2)
+        XCTAssert(e1 != e2)
     }
     
     func testIsLeft() {

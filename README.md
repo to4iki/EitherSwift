@@ -29,9 +29,9 @@ struct Error {
 
 func parseInt(s: String) -> Either<Error, Int> {
     if let i = s.toInt() {
-        return Either(right: i)
+        return right(i)
     } else {
-        return Either(left: Error("parse error."))
+        return left(Error("parse error."))
     }
 }
 ```
@@ -91,6 +91,11 @@ parseInt("a") ?? 1 // .Right(1)
 ```
 
 ## Methods
+
+### Public
+
+- `left<A, B>(value: A) -> Either<A, B>`
+- `right<A, B>(value: B) -> Either<A, B>`
 
 ### Either\<A, B\>
 
