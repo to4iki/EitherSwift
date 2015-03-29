@@ -81,38 +81,40 @@ class EitherSwiftTests: XCTestCase {
         XCTAssertEqual(e2.right.get, "s value")
     }
     
-    func testFallback() {
-        let e1 = Helper.try(false, "f").fallback { Helper.try(true, "s") }
+    func testRecover() {
+        let e1 = Helper.try(false, "f").recover { "s" }
         XCTAssert(e1.left.toOption() == nil)
         XCTAssertEqual(e1.right.get, "s")
         
-        let e2 = Helper.try(true, "s").fallback { Helper.try(true, "s2") }
-        XCTAssert(e2.left.toOption() == nil)
-        XCTAssertEqual(e2.right.get, "s")
-    }
-    
-    func testFallbackOperator() {
-        let e1 = Helper.try(false, "f") ?? Helper.try(true, "s")
-        XCTAssert(e1.left.toOption() == nil)
-        XCTAssertEqual(e1.right.get, "s")
-        
-        let e2 = Helper.try(true, "s") ?? Helper.try(true, "s2")
+        let e2 = Helper.try(true, "s").recover { "s2" }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s")
         
-        let e3 = Helper.try(false, "f1") ?? Helper.try(false, "f2") ?? Helper.try(true, "s")
+        let e3 = Helper.try(false, "f1").recoverWith({
+            Helper.try(false, "f2")
+        }).recover({
+            "s"
+        })
         XCTAssert(e3.left.toOption() == nil)
         XCTAssertEqual(e3.right.get, "s")
     }
     
-    func testFallbackOperatorWithRawValue() {
-        let e1 = Helper.try(false, "f") ?? "s"
+    func testRecoverWith() {
+        let e1 = Helper.try(false, "f").recoverWith { Helper.try(true, "s") }
         XCTAssert(e1.left.toOption() == nil)
         XCTAssertEqual(e1.right.get, "s")
         
-        let e2 = Helper.try(true, "s") ?? "s2"
+        let e2 = Helper.try(true, "s").recoverWith { Helper.try(true, "s2") }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s")
+        
+        let e3 = Helper.try(false, "f1").recoverWith({
+            Helper.try(false, "f2")
+        }).recoverWith({
+            Helper.try(true, "s")
+        })
+        XCTAssert(e3.left.toOption() == nil)
+        XCTAssertEqual(e3.right.get, "s")
     }
     
     func testCond() {

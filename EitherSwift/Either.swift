@@ -125,9 +125,24 @@ public enum Either<A, B> {
     Returns the given argument if `Failure` or self if `Success`.
     like null Coalescing Operator.
     
-    :param: f The function to bind across `Failure`.
+    :param: f The rawValue function to bind across `Failure`.
     */
-    public func fallback(f: () -> Either<Failure, Success>) -> Either<Failure, Success> {
+    public func recover(f: () -> Success) -> Either<Failure, Success> {
+        switch self {
+        case .Left:
+            return Either(right: f())
+        case .Right:
+            return self
+        }
+    }
+    
+    /**
+    Returns the given argument if `Failure` or self if `Success`.
+    like null Coalescing Operator.
+    
+    :param: f The either function to bind across `Failure`.
+    */
+    public func recoverWith(f: () -> Either<Failure, Success>) -> Either<Failure, Success> {
         switch self {
         case .Left:
             return f()
@@ -190,16 +205,6 @@ Inequality for Either is defined by the inequality of the contained types
 */
 public func != <A, B where A: Equatable, B: Equatable>(lhs: Either<A, B>, rhs: Either<A, B>) -> Bool {
     return !(rhs == lhs)
-}
-
-// fallback Operator Either<Failure, Success>
-public func ?? <Failure, Success>(lhs: Either<Failure, Success>, rhs: @autoclosure () ->  Either<Failure, Success>) -> Either<Failure, Success> {
-    return lhs.fallback(rhs)
-}
-
-// fallback Operator RawValue
-public func ?? <Failure, Success>(lhs: Either<Failure, Success>, rhs: @autoclosure () ->  Success) -> Either<Failure, Success> {
-    return lhs.fallback { right(rhs()) }
 }
 
 /**

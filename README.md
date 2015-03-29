@@ -74,20 +74,25 @@ result.fold(
 ) // right
 
 // chain
-// Like null Coalescing Operator
+// like Optional Chaining
 result.chain { (i: Int) -> Either<Error, Int> in
-    Either(right: i * i) 
+    Either(right: i * i)
 } // .Right(4)
 parseInt("a").chain { (i: Int) -> Either<Error, Int> in 
     Either(right: i * i)
 } //.Left("parse error")
 
-// fallback(??)
-// Like Optional Chaining
-result.fallback { Either(right: 0) } // .Right(2)
-parseInt("a").fallback { Either(right: 0) } // .Right(0)
-parseInt("a") ?? parseInt("b") ?? parseInt("3") // .Right(3)
-parseInt("a") ?? 1 // .Right(1)
+// recover / recoverWith
+// like null Coalescing Operator
+result.recoverWith { Either(right: 0) } // .Right(2)
+parseInt("a").recoverWith { Either(right: 0) } // .Right(0)
+parseInt("a").recoverWith({
+    parseInt("b")
+}).recoverWith({
+    parseInt("3")
+}) // .Right(3)
+
+parseInt("a").recover { 1 } // .Right(1)
 ```
 
 ## Methods
@@ -106,7 +111,8 @@ typealias Success = B
     - `fold<X>(fa: A -> X, _ fb: B -> X) -> X`
     - `swap() -> Either<B, A> `
     - `chain<X>(f: (Success) -> Either<Failure, X>)  -> Either<Failure, X>`
-    - `fallback(f: () -> Either<Failure, Success>) -> Either<Failure, Success>`
+    - `recover(f: () -> Success) -> Either<Failure, Success>`
+    - `recoverWith(f: () -> Either<Failure, Success>) -> Either<Failure, Success>`
 - Class Methods
     - `cond<A, B>(test: Bool, right: () -> B, left: () -> A) -> Either<A, B>`
 
