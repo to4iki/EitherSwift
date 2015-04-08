@@ -66,50 +66,62 @@ class EitherSwiftTests: XCTestCase {
         XCTAssertEqual(es.right.get, 12)
     }
     
-    func testChain() {
-        let e1 = Helper.try(false, "f").chain { (s: String) -> Either<Error, String> in
+    func testMap() {
+    }
+    
+    func testFlatMap() {
+        let e1 = Helper.try(false, "f").flatMap { (s: String) -> Either<Error, String> in
             return Either(right: "\(s) value")
         }
         XCTAssertEqual(e1.left.get.reason, "f")
         XCTAssert(e1.right.toOption() == nil)
         
-        let e2 = Helper.try(true, "s").chain { (s: String) -> Either<Error, String> in
+        let e2 = Helper.try(true, "s").flatMap { (s: String) -> Either<Error, String> in
             return Either(right: "\(s) value")
         }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s value")
     }
     
-    func testRecover() {
-        let e1 = Helper.try(false, "f").recover { "s" }
+    func testGetOrElse() {
+        let e1 = Helper.try(false, "f").getOrElse { "s" }
+        XCTAssertEqual(e1, "s")
+        
+        let e2 = Helper.try(true, "s").getOrElse { "s2" }
+        XCTAssertEqual(e2, "s")
+    }
+    
+    func testOrElseRawValue() {
+        let e1 = Helper.try(false, "f").orElse { "s" }
         XCTAssert(e1.left.toOption() == nil)
         XCTAssertEqual(e1.right.get, "s")
         
-        let e2 = Helper.try(true, "s").recover { "s2" }
+        let e2 = Helper.try(true, "s").orElse { "s2" }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s")
         
-        let e3 = Helper.try(false, "f1").recoverWith({
+        let e3 = Helper.try(false, "f1").orElse({
             Helper.try(false, "f2")
-        }).recover({
+        }).orElse({
             "s"
         })
+        
         XCTAssert(e3.left.toOption() == nil)
         XCTAssertEqual(e3.right.get, "s")
     }
     
-    func testRecoverWith() {
-        let e1 = Helper.try(false, "f").recoverWith { Helper.try(true, "s") }
+    func testOrElse() {
+        let e1 = Helper.try(false, "f").orElse { Helper.try(true, "s") }
         XCTAssert(e1.left.toOption() == nil)
         XCTAssertEqual(e1.right.get, "s")
         
-        let e2 = Helper.try(true, "s").recoverWith { Helper.try(true, "s2") }
+        let e2 = Helper.try(true, "s").orElse { Helper.try(true, "s2") }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s")
         
-        let e3 = Helper.try(false, "f1").recoverWith({
+        let e3 = Helper.try(false, "f1").orElse({
             Helper.try(false, "f2")
-        }).recoverWith({
+        }).orElse({
             Helper.try(true, "s")
         })
         XCTAssert(e3.left.toOption() == nil)

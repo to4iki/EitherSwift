@@ -12,6 +12,8 @@
 		4D4DB7961A9CE97A0078DECE /* EitherSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */; };
 		4D4DB7A01A9CE98C0078DECE /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4DB79F1A9CE98C0078DECE /* Either.swift */; };
 		4DCCE3F91AB7041E002A3156 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCCE3F81AB7041E002A3156 /* Box.swift */; };
+		4DCDEB861AD58237008C1917 /* ProjectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCDEB851AD58237008C1917 /* ProjectionTests.swift */; };
+		4DDF078F1AD56F8C00234ADA /* Projection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF078E1AD56F8C00234ADA /* Projection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,8 @@
 		4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EitherSwiftTests.swift; sourceTree = "<group>"; };
 		4D4DB79F1A9CE98C0078DECE /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		4DCCE3F81AB7041E002A3156 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		4DCDEB851AD58237008C1917 /* ProjectionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectionTests.swift; sourceTree = "<group>"; };
+		4DDF078E1AD56F8C00234ADA /* Projection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Projection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,7 @@
 				4D4DB7881A9CE97A0078DECE /* EitherSwift.h */,
 				4DCCE3F81AB7041E002A3156 /* Box.swift */,
 				4D4DB79F1A9CE98C0078DECE /* Either.swift */,
+				4DDF078E1AD56F8C00234ADA /* Projection.swift */,
 				4D4DB7861A9CE97A0078DECE /* Supporting Files */,
 			);
 			path = EitherSwift;
@@ -95,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */,
+				4DCDEB851AD58237008C1917 /* ProjectionTests.swift */,
 				4D4DB7931A9CE97A0078DECE /* Supporting Files */,
 			);
 			path = EitherSwiftTests;
@@ -217,6 +223,7 @@
 			files = (
 				4D4DB7A01A9CE98C0078DECE /* Either.swift in Sources */,
 				4DCCE3F91AB7041E002A3156 /* Box.swift in Sources */,
+				4DDF078F1AD56F8C00234ADA /* Projection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DCDEB861AD58237008C1917 /* ProjectionTests.swift in Sources */,
 				4D4DB7961A9CE97A0078DECE /* EitherSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

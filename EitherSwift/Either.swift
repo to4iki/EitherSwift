@@ -37,8 +37,6 @@ public func right<A, B>(value: B) -> Either<A, B> {
 *  Instances of Either are either an instance of Left or Right.
 */
 public enum Either<A, B> {
-    typealias Failure = A
-    typealias Success = B
     
     case Left(Box<A>)
     case Right(Box<B>)
@@ -95,7 +93,9 @@ public enum Either<A, B> {
     }
     
     /**
-    If this is a `Left`, then return the left value in `Right` or vice versa.
+    Flip the left/right values in this disjunction.
+    
+    Alias for `~`
     */
     public func swap() -> Either<B, A> {
         switch self {
@@ -106,49 +106,58 @@ public enum Either<A, B> {
         }
     }
     
-    /**.
-    Returns the given argument if `Success` or `Failure` value.
-    like Optional Chaining.
+    /**
+    Return the right value of this disjunction or the given default if left.
+    like null Coalescing Operator.
     
-    :param: f The function to bind across `Success`.
+    Alias for `|`
+    
+    :param: f The rawValue function to bind across `Left`.    
     */
-    public func chain<X>(f: (Success) -> Either<Failure, X>)  -> Either<Failure, X> {
-        switch self {
-        case .Left(let l):
-            return Either<Failure, X>(left: l.unbox)
-        case .Right(let r):
-            return f(r.unbox)
-        }
+    public func getOrElse(or: () -> B) -> B {
+        return right.getOrElse(or)
     }
     
     /**
-    Returns the given argument if `Failure` or self if `Success`.
+    Return this if it is a right, otherwise, return the given value.
     like null Coalescing Operator.
+    
+    Alias for `|||`
     
     :param: f The rawValue function to bind across `Failure`.
     */
-    public func recover(f: () -> Success) -> Either<Failure, Success> {
-        switch self {
-        case .Left:
-            return Either(right: f())
-        case .Right:
-            return self
-        }
+    public func orElse(or: () -> B) -> Either<A, B> {
+        return fold({ _ in Either(right: or()) }, { _ in self })
     }
     
     /**
-    Returns the given argument if `Failure` or self if `Success`.
+    Return this if it is a right, otherwise, return the given value.
     like null Coalescing Operator.
     
-    :param: f The either function to bind across `Failure`.
+    Alias for `|||`
+    
+    :param: f The either function to bind across `Left`.
     */
-    public func recoverWith(f: () -> Either<Failure, Success>) -> Either<Failure, Success> {
-        switch self {
-        case .Left:
-            return f()
-        case .Right:
-            return self
-        }
+    public func orElse(or: () -> Either<A, B>) -> Either<A, B> {
+        return fold({ _ in or() }, { _ in self })
+    }
+    
+    /**
+    Maps `Right` values with `f`, and re-wraps `Left` values.
+    
+    :param: f The function to bind across `Success`.
+    */
+    public func map<X>(f: B -> X) -> Either<A, X> {
+        return right.map(f)
+    }
+    
+    /**.
+    Returns the result of applying `f` to `Right` values, or re-wrapping `Left` values.
+    
+    :param: f The function to bind across `Success`.
+    */
+    public func flatMap<X>(f: B -> Either<A, X>) -> Either<A, X> {
+        return right.flatMap(f)
     }
     
     /**
