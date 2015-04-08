@@ -46,10 +46,9 @@ result.isRight // true
 // get(Forced Unwrapping)
 result.right.get // 2
 
-// getOrElse(&&)
+// getOrElse
 result.left.getOrElse { Error("failed") }.reason // failed
 result.right.getOrElse { 0 } // 2
-result.right ?? 0 // 2
 
 // exists
 result.left.exists { _ in true } // false
