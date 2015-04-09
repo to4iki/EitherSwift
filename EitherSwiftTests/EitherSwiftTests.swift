@@ -67,6 +67,13 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testMap() {
+        let e1 = Helper.try(false, "f").map { (s: String) -> String in "\(s) value" }
+        XCTAssertEqual(e1.left.get.reason, "f")
+        XCTAssert(e1.right.toOption() == nil)
+        
+        let e2 = Helper.try(true, "s").map { (s: String) -> String in "\(s) value" }
+        XCTAssert(e2.left.toOption() == nil)
+        XCTAssertEqual(e2.right.get, "s value")
     }
     
     func testFlatMap() {

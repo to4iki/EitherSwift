@@ -37,7 +37,6 @@ public func right<A, B>(value: B) -> Either<A, B> {
 *  Instances of Either are either an instance of Left or Right.
 */
 public enum Either<A, B> {
-    
     case Left(Box<A>)
     case Right(Box<B>)
     

@@ -79,30 +79,30 @@ class ProjectionTests: XCTestCase {
     
     func testLeftForall() {
         let e = Helper.try(false, "left")
-        XCTAssert(e.left.forall { countElements($0.reason) > 3 } == true)
-        XCTAssert(e.left.forall { countElements($0.reason) > 4 } == false)
-        XCTAssert(e.right.forall { countElements($0) > 100 } == true)
+        XCTAssert(e.left.forall { count($0.reason) > 3 } == true)
+        XCTAssert(e.left.forall { count($0.reason) > 4 } == false)
+        XCTAssert(e.right.forall { count($0) > 100 } == true)
     }
     
     func testRightForall() {
         let e = Helper.try(true, "right")
-        XCTAssert(e.left.forall { countElements($0.reason) > 100 } == true)
-        XCTAssert(e.right.forall { countElements($0) > 4 } == true)
-        XCTAssert(e.right.forall { countElements($0) > 5 } == false)
+        XCTAssert(e.left.forall { count($0.reason) > 100 } == true)
+        XCTAssert(e.right.forall { count($0) > 4 } == true)
+        XCTAssert(e.right.forall { count($0) > 5 } == false)
     }
     
     func testLeftExists() {
         let e = Helper.try(false, "left")
-        XCTAssert(e.left.exists { countElements($0.reason) > 3 } == true)
-        XCTAssert(e.left.exists { countElements($0.reason) > 4 } == false)
-        XCTAssert(e.right.exists { countElements($0) > 100 } == false)
+        XCTAssert(e.left.exists { count($0.reason) > 3 } == true)
+        XCTAssert(e.left.exists { count($0.reason) > 4 } == false)
+        XCTAssert(e.right.exists { count($0) > 100 } == false)
     }
     
     func testRightExists() {
         let e = Helper.try(true, "right")
-        XCTAssert(e.left.exists { countElements($0.reason) > 100 } == false)
-        XCTAssert(e.right.exists { countElements($0) > 4 } == true)
-        XCTAssert(e.right.exists { countElements($0) > 5 } == false)
+        XCTAssert(e.left.exists { count($0.reason) > 100 } == false)
+        XCTAssert(e.right.exists { count($0) > 4 } == true)
+        XCTAssert(e.right.exists { count($0) > 5 } == false)
     }
     
     func testLeftMap() {
@@ -143,15 +143,15 @@ class ProjectionTests: XCTestCase {
     
     func testLeftFilter() {
         let e = Helper.try(false, "left")
-        XCTAssert(e.left.filter { countElements($0.reason) > 3 } != nil)
-        XCTAssert(e.left.filter { countElements($0.reason) > 4 } == nil)
-        XCTAssert(e.right.filter { countElements($0) > 100 } == nil)
+        XCTAssert(e.left.filter { count($0.reason) > 3 } != nil)
+        XCTAssert(e.left.filter { count($0.reason) > 4 } == nil)
+        XCTAssert(e.right.filter { count($0) > 100 } == nil)
     }
     
     func testRightFilter() {
         let e = Helper.try(true, "right")
-        XCTAssert(e.left.filter { countElements($0.reason) > 100 } == nil)
-        XCTAssert(e.right.filter { countElements($0) > 4 } != nil)
-        XCTAssert(e.right.filter { countElements($0) > 5 } == nil)
+        XCTAssert(e.left.filter { count($0.reason) > 100 } == nil)
+        XCTAssert(e.right.filter { count($0) > 4 } != nil)
+        XCTAssert(e.right.filter { count($0) > 5 } == nil)
     }
 }
