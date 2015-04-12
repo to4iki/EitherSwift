@@ -19,7 +19,69 @@ Instances of Either are either an instance of Left or Right.
 Swift Either type like [scala.util.Either](http://www.scala-lang.org/api/current/#scala.util.Either)  
 ++ some in  [\/ - scalaz.\/](http://docs.typelevel.org/api/scalaz/stable/7.0.2/doc/#scalaz.$bslash$div)
 
+Take **Right Projection** is decided it would be want.
+
 ## Usage
+
+```swift
+struct Error {
+    var reason: String
+    init(_ reason: String) { self.reason = reason }
+}
+let resultL = Either<Error, String>.left(Error("failed"))
+let resultR = Either<Error, String>.right("ok")
+```
+
+#### isLeft / isRight
+```swift
+resultR.isRight // true
+resultR.isLeft  // false
+```
+
+#### swap(~)
+```swift
+~Either<String, String>.left("failed") ?? "fallback" // failed
+```
+
+#### getOrElse(??)
+```swift
+// Alias for Right Projection.getOrElse
+resultL ?? "fallback" // fallback
+resultR ?? "fallback" // success
+```
+
+#### orElse(|||)
+```swift
+// Right Projection
+resultL ||| "ok" // .Right("ok")
+Either<Error, String>.left(Error("failed1")) ||| resultL ||| resultR // .Right("ok")
+```
+
+#### map
+```swift
+// Alias for Right Projection.map
+resultR.map { "\($0)!" } // .Right("ok!")
+resultL.map { "\($0)!" } // .Left(Error("failed"))
+```
+
+#### flatMap(>>-)
+```swift
+func isFull<T>(string: String) -> Either<T, Bool> {
+    return .right(!string.isEmpty)
+}
+
+(resultL >>- isFull).fold(
+    { e in e.reason},
+    { s in s.description }
+)
+// failed
+
+(resultR >>- isFull).fold(
+    { e in e.reason},
+    { s in s.description }
+)
+// true
+```
 
 ## Methods
 
@@ -28,9 +90,9 @@ Swift Either type like [scala.util.Either](http://www.scala-lang.org/api/current
 - Instance Methods
     - `fold<X>(fa: A -> X, _ fb: B -> X) -> X`
     - `swap() -> Either<B, A>`
-    - `getOrElse(or: () -> B) -> B`
-    - `orElse(or: () -> B) -> Either<A, B>`
-    - `orElse(or: () -> Either<A, B>) -> Either<A, B>`
+    - `getOrElse(or: () -> B) -> B` Right Projection
+    - `orElse(or: () -> B) -> Either<A, B>` Right Projection
+    - `orElse(or: () -> Either<A, B>) -> Either<A, B>` Right Projection
     - `map<X>(f: B -> X) -> Either<A, X>` Right Projection
     - `flatMap<X>(f: B -> Either<A, X>) -> Either<A, X>` Right Projection
 - Class Methods
