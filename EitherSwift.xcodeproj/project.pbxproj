@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0AA9E51ADABCA70026AE26 /* EitherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0AA9E41ADABCA70026AE26 /* EitherType.swift */; };
 		4D4DB7891A9CE97A0078DECE /* EitherSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D4DB7881A9CE97A0078DECE /* EitherSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4D4DB78F1A9CE97A0078DECE /* EitherSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D4DB7831A9CE97A0078DECE /* EitherSwift.framework */; };
 		4D4DB7961A9CE97A0078DECE /* EitherSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4DB7951A9CE97A0078DECE /* EitherSwiftTests.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D0AA9E41ADABCA70026AE26 /* EitherType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EitherType.swift; sourceTree = "<group>"; };
 		4D4DB7831A9CE97A0078DECE /* EitherSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EitherSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D4DB7871A9CE97A0078DECE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D4DB7881A9CE97A0078DECE /* EitherSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EitherSwift.h; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				4D4DB7881A9CE97A0078DECE /* EitherSwift.h */,
 				4DCCE3F81AB7041E002A3156 /* Box.swift */,
 				4D4DB79F1A9CE98C0078DECE /* Either.swift */,
+				4D0AA9E41ADABCA70026AE26 /* EitherType.swift */,
 				4DE5D4F41AD819B900865310 /* Operators.swift */,
 				4DDF078E1AD56F8C00234ADA /* Projection.swift */,
 				4D4DB7861A9CE97A0078DECE /* Supporting Files */,
@@ -225,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4DB7A01A9CE98C0078DECE /* Either.swift in Sources */,
+				4D0AA9E51ADABCA70026AE26 /* EitherType.swift in Sources */,
 				4DE5D4F51AD819B900865310 /* Operators.swift in Sources */,
 				4DCCE3F91AB7041E002A3156 /* Box.swift in Sources */,
 				4DDF078F1AD56F8C00234ADA /* Projection.swift in Sources */,

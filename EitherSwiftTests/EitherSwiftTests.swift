@@ -16,7 +16,7 @@ struct Error {
 
 struct Helper {
     static func try(success: Bool, _ message: String) -> Either<Error, String> {
-        return success ? right(message) : left(Error(message))
+        return success ? Either.right(message) : Either.left(Error(message))
     }
 }
 
@@ -31,7 +31,7 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testLeft() {
-        switch Either<Error, String>(left: Error("left")) {
+        switch Either<Error, String>.left(Error("left")) {
         case .Left(let l):
             XCTAssertEqual(l.unbox.reason, "left")
         case .Right:
@@ -40,7 +40,7 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testRight() {
-        switch Either<Error, String>(right: "right") {
+        switch Either<Error, String>.right("right") {
         case .Left:
             XCTAssert(false, "not reached")
         case .Right(let r):
@@ -57,7 +57,7 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testSwap() {
-        let e = Either<Int, String>(left: 12)
+        let e = Either<Int, String>.left(12)
         XCTAssertEqual(e.left.get, 12)
         XCTAssert(e.right.toOption() == nil)
         
@@ -67,7 +67,7 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testSwapOperator() {
-        let e = Either<Int, String>(left: 12)
+        let e = Either<Int, String>.left(12)
         
         let es = ~e
         XCTAssert(es.left.toOption() == nil)
@@ -86,24 +86,24 @@ class EitherSwiftTests: XCTestCase {
     
     func testFlatMap() {
         let e1 = Helper.try(false, "f").flatMap { (s: String) -> Either<Error, String> in
-            return Either(right: "\(s) value")
+            return Either.right("\(s) value")
         }
 
         XCTAssertEqual(e1.left.get.reason, "f")
         XCTAssert(e1.right.toOption() == nil)
         
         let e2 = Helper.try(true, "s").flatMap { (s: String) -> Either<Error, String> in
-            return Either(right: "\(s) value")
+            return Either.right("\(s) value")
         }
         XCTAssert(e2.left.toOption() == nil)
         XCTAssertEqual(e2.right.get, "s value")
     }
     
     func testflatMapOperator() {
-        let e1 = (Helper.try(false, "f") >>- right).fold({ _ in "ff"}, { _ in "s"})
+        let e1 = (Helper.try(false, "f") >>- Either.right).fold({ _ in "ff"}, { _ in "s"})
         XCTAssertEqual(e1, "ff")
         
-        let e2 = (Helper.try(true, "s") >>- right).fold({ _ in "f"}, { _ in "ss"})
+        let e2 = (Helper.try(true, "s") >>- Either.right).fold({ _ in "f"}, { _ in "ss"})
         XCTAssertEqual(e2, "ss")
     }
     
@@ -180,29 +180,29 @@ class EitherSwiftTests: XCTestCase {
     }
     
     func testRightEquality() {
-        let e1: Either<NSError, String> = right("either")
-        let e2: Either<NSError, String> = right("either")
+        let e1: Either<NSError, String> = Either.right("either")
+        let e2: Either<NSError, String> = Either.right("either")
         XCTAssert(e1 == e2)
     }
     
     func testLeftEquality() {
         let err = NSError(domain: "", code: 0, userInfo: nil)
-        let e1: Either<NSError, String> = left(err)
-        let e2: Either<NSError, String> = left(err)
+        let e1: Either<NSError, String> = Either.left(err)
+        let e2: Either<NSError, String> = Either.left(err)
         XCTAssert(e1 == e2)
     }
     
     func testRightInequality() {
-        let e1: Either<NSError, String> = right("either")
-        let e2: Either<NSError, String> = right("different either")
+        let e1: Either<NSError, String> = Either.right("either")
+        let e2: Either<NSError, String> = Either.right("different either")
         XCTAssert(e1 != e2)
     }
     
     func testLeftInequality() {
         let err = NSError(domain: "", code: 0, userInfo: nil)
         let err2 = NSError(domain: "", code: 1, userInfo: nil)
-        let e1: Either<NSError, String> = left(err)
-        let e2: Either<NSError, String> = left(err2)
+        let e1: Either<NSError, String> = Either.left(err)
+        let e2: Either<NSError, String> = Either.left(err2)
         XCTAssert(e1 != e2)
     }
     

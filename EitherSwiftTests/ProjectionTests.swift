@@ -106,8 +106,8 @@ class ProjectionTests: XCTestCase {
     }
     
     func testLeftMap() {
-        let e1 = Either<Int, Int>(left: 12).left.map { $0 + 2 } // .Left(14)
-        let e2 = Either<Int, Int>(right: 12).left.map { $0 + 2 } // .Right(12)
+        let e1 = Either<Int, Int>.left(12).left.map { $0 + 2 } // .Left(14)
+        let e2 = Either<Int, Int>.right(12).left.map { $0 + 2 } // .Right(12)
         XCTAssertEqual(e1.left.get, 14)
         XCTAssert(e1.right.toOption() == nil)
         XCTAssert(e2.left.toOption() == nil)
@@ -115,8 +115,8 @@ class ProjectionTests: XCTestCase {
     }
     
     func testRightMap() {
-        let e1 = Either<Int, Int>(left: 12).right.map { $0 + 2 } // .Left(12)
-        let e2 = Either<Int, Int>(right: 12).right.map { $0 + 2 } // .Right(14)
+        let e1 = Either<Int, Int>.left(12).right.map { $0 + 2 } // .Left(12)
+        let e2 = Either<Int, Int>.right(12).right.map { $0 + 2 } // .Right(14)
         XCTAssertEqual(e1.left.get, 12)
         XCTAssert(e1.right.toOption() == nil)
         XCTAssert(e2.left.toOption() == nil)
@@ -124,8 +124,8 @@ class ProjectionTests: XCTestCase {
     }
     
     func testLeftFlatMap() {
-        let e1 = Either<Int, Int>(left: 12).left.flatMap { _ in Either<String, Int>(left: "swift") } // .Left("swift")
-        let e2 = Either<Int, Int>(right: 12).left.flatMap { _ in Either<String, Int>(left: "swift") } // .Right(12)
+        let e1 = Either<Int, Int>.left(12).left.flatMap { _ in Either<String, Int>.left("swift") } // .Left("swift")
+        let e2 = Either<Int, Int>.right(12).left.flatMap { _ in Either<String, Int>.left("swift") } // .Right(12)
         XCTAssertEqual(e1.left.get, "swift")
         XCTAssert(e1.right.toOption() == nil)
         XCTAssert(e2.left.toOption() == nil)
@@ -133,8 +133,8 @@ class ProjectionTests: XCTestCase {
     }
     
     func testRightFlatMap() {
-        let e1 = Either<Int, Int>(left: 12).right.flatMap { _ in Either<Int, String>(right: "swift") } // .Left(12)
-        let e2 = Either<Int, Int>(right: 12).right.flatMap { _ in Either<Int, String>(right: "swift") } // .Right("swift")
+        let e1 = Either<Int, Int>.left(12).right.flatMap { _ in Either<Int, String>.right("swift") } // .Left(12)
+        let e2 = Either<Int, Int>.right(12).right.flatMap { _ in Either<Int, String>.right("swift") } // .Right("swift")
         XCTAssertEqual(e1.left.get, 12)
         XCTAssert(e1.right.toOption() == nil)
         XCTAssert(e2.left.toOption() == nil)

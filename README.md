@@ -23,11 +23,6 @@ Swift Either type like [scala.util.Either](http://www.scala-lang.org/api/current
 
 ## Methods
 
-### Public
-
-- `left<A, B>(value: A) -> Either<A, B>`
-- `right<A, B>(value: B) -> Either<A, B>`
-
 ### Either\<A, B\>
 
 - Instance Methods
@@ -39,6 +34,8 @@ Swift Either type like [scala.util.Either](http://www.scala-lang.org/api/current
     - `map<X>(f: B -> X) -> Either<A, X>` Right Projection
     - `flatMap<X>(f: B -> Either<A, X>) -> Either<A, X>` Right Projection
 - Class Methods
+    - `left(value: A) -> Either<A, B>`
+    - `right(value: B) -> Either<A, B>`
     - `cond<A, B>(test: Bool, right: () -> B, left: () -> A) -> Either<A, B>`
 
 ### LeftProjection\<A, B\>

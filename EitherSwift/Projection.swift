@@ -67,7 +67,7 @@ public struct LeftProjection<A, B> {
     Maps the function argument through `Left`.
     */
     public func map<X>(f: A -> X) -> Either<X, B> {
-        return e.fold({ a in left(f(a)) }, { right($0) })
+        return e.fold({ a in Either.left(f(a)) }, { Either.right($0) })
     }
     
     /**
@@ -76,7 +76,7 @@ public struct LeftProjection<A, B> {
     :param: f the function to bind across `Left`.
     */
     public func flatMap<X>(f: A -> Either<X, B>) -> Either<X, B> {
-        return e.fold({ f($0) }, { right($0) })
+        return e.fold({ f($0) }, { Either.right($0) })
     }
     
     /**
@@ -84,7 +84,7 @@ public struct LeftProjection<A, B> {
     `p` does not hold for the left value, otherwise, returns a `Left`.
     */
     public func filter(p: A -> Bool) -> Either<A, B>? {
-        return e.fold({ p($0) ? left($0) : nil }, { _ in nil} )
+        return e.fold({ p($0) ? Either.left($0) : nil }, { _ in nil} )
     }
     
     /**
@@ -157,7 +157,7 @@ public struct RightProjection<A, B> {
     The given function is applied if this is a `Right`.
     */
     public func map<X>(f: B -> X) -> Either<A, X> {
-        return e.fold({ left($0) }, { b in right(f(b)) })
+        return e.fold({ Either.left($0) }, { b in Either.right(f(b)) })
     }
     
     /**
@@ -166,7 +166,7 @@ public struct RightProjection<A, B> {
     :param: f the function to bind across `Right`.
     */
     public func flatMap<X>(f: B -> Either<A, X>) -> Either<A, X> {
-        return e.fold({ left($0) }, { f($0) })
+        return e.fold({ Either.left($0) }, { f($0) })
     }
     
     /**
@@ -174,7 +174,7 @@ public struct RightProjection<A, B> {
     `p` does not hold for the right value, otherwise, returns a `Right`.
     */
     public func filter(p: B -> Bool) -> Either<A, B>? {
-        return e.fold({ _ in nil }, { p($0) ? right($0) : nil })
+        return e.fold({ _ in nil }, { p($0) ? Either.right($0) : nil })
     }
     
     /**

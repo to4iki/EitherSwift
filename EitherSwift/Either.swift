@@ -7,55 +7,51 @@
 //
 
 /**
-A left `Either` returning `value`
-This form is preferred to `Either.Left(Box(value))`
-because it does not require dealing with `Box()`
-
-:param: value result value
-
-:returns: Left
-*/
-public func left<A, B>(value: A) -> Either<A, B> {
-    return .Left(Box(value))
-}
-
-/**
-A right `Either` returning `value`
-This form is preferred to `Either.Right(Box(value))`
-because it does not require dealing with `Box()`
-
-:param: value result value
-
-:returns: Right
-*/
-public func right<A, B>(value: B) -> Either<A, B> {
-    return .Right(Box(value))
-}
-
-/**
 Represents a value of one of two possible types (a disjoint union.)
 Instances of Either are either an instance of Left or Right.
 
 - Left:  Left Value
 - Right: Right Value
 */
-public enum Either<A, B> {
+public enum Either<A, B>: EitherType {
     case Left(Box<A>)
     case Right(Box<B>)
     
-    public init(left: A) {
-        self = .Left(Box(left))
+    /**
+    A left `Either` returning `value`
+    This form is preferred to `Either.Left(Box(value))`
+    because it does not require dealing with `Box()`
+    
+    :param: value result value
+    
+    :returns: Left
+    */
+    public static func left(value: A) -> Either<A, B> {
+        return .Left(Box(value))
     }
     
-    public init(right: B) {
-        self = .Right(Box(right))
+    /**
+    A right `Either` returning `value`
+    This form is preferred to `Either.Right(Box(value))`
+    because it does not require dealing with `Box()`
+    
+    :param: value result value
+    
+    :returns: Right
+    */
+    public static func right(value: B) -> Either<A, B> {
+        return .Right(Box(value))
     }
     
     /// Projects this `Either` as a `Left`.
-    public var left: LeftProjection<A, B> { return LeftProjection(self) }
+    public var left: LeftProjection<A, B> {
+        return LeftProjection(self)
+    }
     
     /// Projects this `Either` as a `Right`.
-    public var right: RightProjection<A, B> { return RightProjection(self) }
+    public var right: RightProjection<A, B> {
+        return RightProjection(self)
+    }
     
     /// Returns `true` if this is a `Left`, `false` otherwise.
     public var isLeft: Bool {
@@ -132,7 +128,7 @@ public enum Either<A, B> {
     :returns: Either<A, B>
     */
     public func orElse(or: () -> B) -> Either<A, B> {
-        return fold({ _ in Either(right: or()) }, { _ in self })
+        return fold({ _ in Either.right(or()) }, { _ in self })
     }
     
     /**
@@ -182,7 +178,7 @@ public enum Either<A, B> {
     :returns: Either<A, B>
     */
     public static func cond<A, B>(test: Bool, right: () -> B, left: () -> A) -> Either<A, B> {
-        return test ? Either<A, B>(right: right()): Either<A, B>(left: left())
+        return test ? Either<A, B>.right(right()): Either<A, B>.left(left())
     }
 }
 
