@@ -73,7 +73,7 @@ public struct LeftProjection<A, B> {
     /**
     Binds the given function across `Left`.
     
-    :param: f The function to bind across `Left`.
+    :param: f the function to bind across `Left`.
     */
     public func flatMap<X>(f: A -> Either<X, B>) -> Either<X, B> {
         return e.fold({ f($0) }, { right($0) })
@@ -126,7 +126,7 @@ public struct RightProjection<A, B> {
     /**
     Executes the given side-effecting function if this is a `Right`.
     
-    :param: f The side-effecting function to execute.
+    :param: f the side-effecting function to execute.
     */
     public func foreach<U>(f: B -> U) {
         switch e {
@@ -163,7 +163,7 @@ public struct RightProjection<A, B> {
     /**
     Binds the given function across `Right`.
     
-    :param: f The function to bind across `Right`.
+    :param: f the function to bind across `Right`.
     */
     public func flatMap<X>(f: B -> Either<A, X>) -> Either<A, X> {
         return e.fold({ left($0) }, { f($0) })

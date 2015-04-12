@@ -33,8 +33,11 @@ public func right<A, B>(value: B) -> Either<A, B> {
 }
 
 /**
-*  Represents a value of one of two possible types (a disjoint union.)
-*  Instances of Either are either an instance of Left or Right.
+Represents a value of one of two possible types (a disjoint union.)
+Instances of Either are either an instance of Left or Right.
+
+- Left:  Left Value
+- Right: Right Value
 */
 public enum Either<A, B> {
     case Left(Box<A>)
@@ -93,8 +96,9 @@ public enum Either<A, B> {
     
     /**
     Flip the left/right values in this disjunction.
-    
     Alias for `~`
+    
+    :returns: the results of swap
     */
     public func swap() -> Either<B, A> {
         switch self {
@@ -108,10 +112,11 @@ public enum Either<A, B> {
     /**
     Return the right value of this disjunction or the given default if left.
     like null Coalescing Operator.
+    Alias for `??`
     
-    Alias for `|`
+    :param: or the rawValue function to bind across `Left`.
     
-    :param: f The rawValue function to bind across `Left`.    
+    :returns: Right Value
     */
     public func getOrElse(or: () -> B) -> B {
         return right.getOrElse(or)
@@ -120,10 +125,11 @@ public enum Either<A, B> {
     /**
     Return this if it is a right, otherwise, return the given value.
     like null Coalescing Operator.
-    
     Alias for `|||`
     
-    :param: f The rawValue function to bind across `Failure`.
+    :param: or the rawValue function to bind across `Left`.
+    
+    :returns: Either<A, B>
     */
     public func orElse(or: () -> B) -> Either<A, B> {
         return fold({ _ in Either(right: or()) }, { _ in self })
@@ -132,10 +138,11 @@ public enum Either<A, B> {
     /**
     Return this if it is a right, otherwise, return the given value.
     like null Coalescing Operator.
-    
     Alias for `|||`
     
-    :param: f The either function to bind across `Left`.
+    :param: or the either function to bind across `Left`.
+    
+    :returns: Either<A, B>
     */
     public func orElse(or: () -> Either<A, B>) -> Either<A, B> {
         return fold({ _ in or() }, { _ in self })
@@ -144,7 +151,9 @@ public enum Either<A, B> {
     /**
     Maps `Right` values with `f`, and re-wraps `Left` values.
     
-    :param: f The function to bind across `Success`.
+    :param: f the function to bind across `Right`.
+    
+    :returns: Either<A, X>
     */
     public func map<X>(f: B -> X) -> Either<A, X> {
         return right.map(f)
@@ -152,8 +161,11 @@ public enum Either<A, B> {
     
     /**.
     Returns the result of applying `f` to `Right` values, or re-wrapping `Left` values.
+    Alias for `>>-`
     
-    :param: f The function to bind across `Success`.
+    :param: f the function to bind across `Right`.
+    
+    :returns: Either<A, X>
     */
     public func flatMap<X>(f: B -> Either<A, X>) -> Either<A, X> {
         return right.flatMap(f)
@@ -162,6 +174,12 @@ public enum Either<A, B> {
     /**
     If the condition is satisfied, return the given `B` in `Right`,
     otherwise, return the given `A` in `Left`.
+    
+    :param: test  predicate
+    :param: right the either function to bind across `Right`.
+    :param: left  the either function to bind across `Left`.
+    
+    :returns: Either<A, B>
     */
     public static func cond<A, B>(test: Bool, right: () -> B, left: () -> A) -> Either<A, B> {
         return test ? Either<A, B>(right: right()): Either<A, B>(left: left())
@@ -213,4 +231,63 @@ Inequality for Either is defined by the inequality of the contained types
 */
 public func != <A, B where A: Equatable, B: Equatable>(lhs: Either<A, B>, rhs: Either<A, B>) -> Bool {
     return !(rhs == lhs)
+}
+
+/**
+Flip the left/right values in this disjunction. Alias for `swap`
+
+:param: either Either<A, B>
+
+:returns: the results of swap
+*/
+public prefix func ~ <A, B>(eithr: Either<A, B>) -> Either<B, A> {
+    return eithr.swap()
+}
+
+/**
+Return the right value of this disjunction or the given default if left. Alias for `getOrElse`
+
+:param: eithr Either<A, B>
+:param: or    the rawValue function to bind across `Left`.
+
+:returns: Right Value
+*/
+public func ?? <A, B>(eithr: Either<A, B>, or:  B) -> B {
+    return eithr.getOrElse { or }
+}
+
+/**
+Return this if it is a right, otherwise, return the given value. Alias for `orElse`
+
+:param: eithr Either<A, B>
+:param: or    the rawValue function to bind across `Left`.
+
+:returns: Either<A, B>
+*/
+public func ||| <A, B>(eithr: Either<A, B>, or:  B) -> Either<A, B> {
+    return eithr.orElse { or }
+}
+
+/**
+Return this if it is a right, otherwise, return the given value. Alias for `orElse`
+
+:param: eithr Either<A, B>
+:param: or    the either function to bind across `Left`.
+
+:returns: Either<A, B>
+*/
+public func ||| <A, B>(eithr: Either<A, B>, or: Either<A, B>) -> Either<A, B> {
+    return eithr.orElse { or }
+}
+
+/**
+Returns the result of applying `f` to `Right` values, or re-wrapping `Left` values. Alias for `flatMap`
+
+:param: either Either<A, B>
+:param: f      the function to bind across `Right`.
+
+:returns: Either<A, X>
+*/
+public func >>- <A, B, X>(either: Either<A, B>, f: B -> Either<A, X>) -> Either<A, X> {
+    return either.flatMap(f)
 }

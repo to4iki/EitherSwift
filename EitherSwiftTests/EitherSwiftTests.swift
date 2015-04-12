@@ -66,6 +66,14 @@ class EitherSwiftTests: XCTestCase {
         XCTAssertEqual(es.right.get, 12)
     }
     
+    func testSwapOperator() {
+        let e = Either<Int, String>(left: 12)
+        
+        let es = ~e
+        XCTAssert(es.left.toOption() == nil)
+        XCTAssertEqual(es.right.get, 12)
+    }
+    
     func testMap() {
         let e1 = Helper.try(false, "f").map { (s: String) -> String in "\(s) value" }
         XCTAssertEqual(e1.left.get.reason, "f")
@@ -80,6 +88,7 @@ class EitherSwiftTests: XCTestCase {
         let e1 = Helper.try(false, "f").flatMap { (s: String) -> Either<Error, String> in
             return Either(right: "\(s) value")
         }
+
         XCTAssertEqual(e1.left.get.reason, "f")
         XCTAssert(e1.right.toOption() == nil)
         
@@ -90,11 +99,27 @@ class EitherSwiftTests: XCTestCase {
         XCTAssertEqual(e2.right.get, "s value")
     }
     
+    func testflatMapOperator() {
+        let e1 = (Helper.try(false, "f") >>- right).fold({ _ in "ff"}, { _ in "s"})
+        XCTAssertEqual(e1, "ff")
+        
+        let e2 = (Helper.try(true, "s") >>- right).fold({ _ in "f"}, { _ in "ss"})
+        XCTAssertEqual(e2, "ss")
+    }
+    
     func testGetOrElse() {
         let e1 = Helper.try(false, "f").getOrElse { "s" }
         XCTAssertEqual(e1, "s")
         
         let e2 = Helper.try(true, "s").getOrElse { "s2" }
+        XCTAssertEqual(e2, "s")
+    }
+    
+    func testGetOrElseOperator() {
+        let e1 = Helper.try(false, "f") ?? "s"
+        XCTAssertEqual(e1, "s")
+        
+        let e2 = Helper.try(true, "s") ?? "s2"
         XCTAssertEqual(e2, "s")
     }
     
@@ -112,7 +137,6 @@ class EitherSwiftTests: XCTestCase {
         }).orElse({
             "s"
         })
-        
         XCTAssert(e3.left.toOption() == nil)
         XCTAssertEqual(e3.right.get, "s")
     }
@@ -133,6 +157,16 @@ class EitherSwiftTests: XCTestCase {
         })
         XCTAssert(e3.left.toOption() == nil)
         XCTAssertEqual(e3.right.get, "s")
+    }
+    
+    func testOrElseOperator() {
+        let e1 = Helper.try(false, "f") ||| "s"
+        XCTAssert(e1.left.toOption() == nil)
+        XCTAssertEqual(e1.right.get, "s")
+        
+        let e2 = Helper.try(false, "f1") ||| Helper.try(false, "f2") ||| Helper.try(true, "s")
+        XCTAssert(e2.left.toOption() == nil)
+        XCTAssertEqual(e2.right.get, "s")
     }
     
     func testCond() {
