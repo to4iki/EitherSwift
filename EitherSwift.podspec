@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "EitherSwift"
-  s.version = "0.0.3"
+  s.version = "0.1.0"
   s.license = "MIT"
   s.summary = "Swift Either type like scala.util.Either"
   s.homepage = "https://github.com/to4iki/EitherSwift"
