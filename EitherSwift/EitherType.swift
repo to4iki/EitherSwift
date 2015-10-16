@@ -10,15 +10,15 @@
 *  A type representing an alternative of one of two types.
 */
 public protocol EitherType {
-    typealias Left
-    typealias Right
+    typealias LeftValue
+    typealias RightValue
     
     /// Constructs a `Left` instance.
-    static func left(value: Left) -> Self
+    static func left(value: LeftValue) -> Self
     
     /// Constructs a `Right` instance.
-    static func right(value: Right) -> Self
+    static func right(value: RightValue) -> Self
     
     /// Returns the result of applying `f` to `Left` values, or `g` to `Right` values.
-    func fold<Result>(fa: Left -> Result, _ fb: Right -> Result) -> Result
+    func fold<Result>(fa: LeftValue -> Result, _ fb: RightValue -> Result) -> Result
 }

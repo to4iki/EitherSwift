@@ -20,43 +20,43 @@ class ProjectionTests: XCTestCase {
     }
     
     func testLeftGet() {
-        let e = Helper.try(false, "left")
+        let e = Helper.`try`(false, "left")
         XCTAssertEqual(e.left.get.reason, "left")
         // XCTAssertEqual(e.right.get, "left") Runtime Error
     }
     
     func testRightGet() {
-        let e = Helper.try(true, "right")
+        let e = Helper.`try`(true, "right")
         XCTAssertEqual(e.right.get, "right")
         // XCTAssertEqual(e.left.get.reason, "right") Runtime Error
     }
     
     func testLeftToOption() {
-        let e = Helper.try(false, "left")
+        let e = Helper.`try`(false, "left")
         XCTAssert(e.left.toOption()?.reason != nil)
         XCTAssert(e.right.toOption() == nil)
     }
     
     func testRightToOption() {
-        let e = Helper.try(true, "right")
+        let e = Helper.`try`(true, "right")
         XCTAssert(e.left.toOption() == nil)
         XCTAssert(e.right.toOption() != nil)
     }
     
     func testLeftGetOrElse() {
-        let e = Helper.try(false, "left")
+        let e = Helper.`try`(false, "left")
         XCTAssertEqual(e.left.getOrElse { Error("or") }.reason, "left")
         XCTAssertEqual(e.right.getOrElse { "or" }, "or")
     }
     
     func testRightGetOrElse() {
-        let e = Helper.try(true, "right")
+        let e = Helper.`try`(true, "right")
         XCTAssertEqual(e.left.getOrElse { Error("or") }.reason, "or")
         XCTAssertEqual(e.right.getOrElse { "or" }, "right")
     }
     
     func testLeftForeach() {
-        let e = Helper.try(false, "left")
+        let e = Helper.`try`(false, "left")
         
         var (leftWasCall, rightWasCall) = (false, false)
         e.left.foreach { _ in leftWasCall = true }
@@ -67,7 +67,7 @@ class ProjectionTests: XCTestCase {
     }
     
     func testRightForeach() {
-        let e = Helper.try(true, "right")
+        let e = Helper.`try`(true, "right")
         
         var (leftWasCall, rightWasCall) = (false, false)
         e.left.foreach { _ in leftWasCall = true }
@@ -78,31 +78,31 @@ class ProjectionTests: XCTestCase {
     }
     
     func testLeftForall() {
-        let e = Helper.try(false, "left")
-        XCTAssert(e.left.forall { count($0.reason) > 3 } == true)
-        XCTAssert(e.left.forall { count($0.reason) > 4 } == false)
-        XCTAssert(e.right.forall { count($0) > 100 } == true)
+        let e = Helper.`try`(false, "left")
+        XCTAssert(e.left.forall { $0.reason.characters.count > 3 } == true)
+        XCTAssert(e.left.forall { $0.reason.characters.count > 4 } == false)
+        XCTAssert(e.right.forall { $0.characters.count > 100 } == true)
     }
     
     func testRightForall() {
-        let e = Helper.try(true, "right")
-        XCTAssert(e.left.forall { count($0.reason) > 100 } == true)
-        XCTAssert(e.right.forall { count($0) > 4 } == true)
-        XCTAssert(e.right.forall { count($0) > 5 } == false)
+        let e = Helper.`try`(true, "right")
+        XCTAssert(e.left.forall { $0.reason.characters.count > 100 } == true)
+        XCTAssert(e.right.forall { $0.characters.count > 4 } == true)
+        XCTAssert(e.right.forall { $0.characters.count > 5 } == false)
     }
     
     func testLeftExists() {
-        let e = Helper.try(false, "left")
-        XCTAssert(e.left.exists { count($0.reason) > 3 } == true)
-        XCTAssert(e.left.exists { count($0.reason) > 4 } == false)
-        XCTAssert(e.right.exists { count($0) > 100 } == false)
+        let e = Helper.`try`(false, "left")
+        XCTAssert(e.left.exists { $0.reason.characters.count > 3 } == true)
+        XCTAssert(e.left.exists { $0.reason.characters.count > 4 } == false)
+        XCTAssert(e.right.exists { $0.characters.count > 100 } == false)
     }
     
     func testRightExists() {
-        let e = Helper.try(true, "right")
-        XCTAssert(e.left.exists { count($0.reason) > 100 } == false)
-        XCTAssert(e.right.exists { count($0) > 4 } == true)
-        XCTAssert(e.right.exists { count($0) > 5 } == false)
+        let e = Helper.`try`(true, "right")
+        XCTAssert(e.left.exists { $0.reason.characters.count > 100 } == false)
+        XCTAssert(e.right.exists { $0.characters.count > 4 } == true)
+        XCTAssert(e.right.exists { $0.characters.count > 5 } == false)
     }
     
     func testLeftMap() {
@@ -142,16 +142,16 @@ class ProjectionTests: XCTestCase {
     }
     
     func testLeftFilter() {
-        let e = Helper.try(false, "left")
-        XCTAssert(e.left.filter { count($0.reason) > 3 } != nil)
-        XCTAssert(e.left.filter { count($0.reason) > 4 } == nil)
-        XCTAssert(e.right.filter { count($0) > 100 } == nil)
+        let e = Helper.`try`(false, "left")
+        XCTAssert(e.left.filter { $0.reason.characters.count > 3 } != nil)
+        XCTAssert(e.left.filter { $0.reason.characters.count > 4 } == nil)
+        XCTAssert(e.right.filter { $0.characters.count > 100 } == nil)
     }
     
     func testRightFilter() {
-        let e = Helper.try(true, "right")
-        XCTAssert(e.left.filter { count($0.reason) > 100 } == nil)
-        XCTAssert(e.right.filter { count($0) > 4 } != nil)
-        XCTAssert(e.right.filter { count($0) > 5 } == nil)
+        let e = Helper.`try`(true, "right")
+        XCTAssert(e.left.filter { $0.reason.characters.count > 100 } == nil)
+        XCTAssert(e.right.filter { $0.characters.count > 4 } != nil)
+        XCTAssert(e.right.filter { $0.characters.count > 5 } == nil)
     }
 }
