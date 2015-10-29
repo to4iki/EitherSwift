@@ -41,7 +41,7 @@ public struct LeftProjection<A, B> {
     public func foreach<U>(f: A -> U) {
         switch e {
         case .Left(let l):
-            f(l.unbox)
+            f(l)
         case .Right:
             break
         }
@@ -133,7 +133,7 @@ public struct RightProjection<A, B> {
         case .Left:
             break
         case .Right(let r):
-            f(r.unbox)
+            f(r)
         }
     }
     

@@ -33,7 +33,7 @@ class EitherSwiftTests: XCTestCase {
     func testLeft() {
         switch Either<Error, String>.left(Error("left")) {
         case .Left(let l):
-            XCTAssertEqual(l.unbox.reason, "left")
+            XCTAssertEqual(l.reason, "left")
         case .Right:
             XCTAssert(false, "not reached")
         }
@@ -44,7 +44,7 @@ class EitherSwiftTests: XCTestCase {
         case .Left:
             XCTAssert(false, "not reached")
         case .Right(let r):
-            XCTAssertEqual(r.unbox, "right")
+            XCTAssertEqual(r, "right")
         }
     }
     
