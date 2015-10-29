@@ -14,8 +14,8 @@ Instances of Either are either an instance of Left or Right.
 - Right: Right Value
 */
 public enum Either<A, B>: EitherType {
-    case Left(Box<A>)
-    case Right(Box<B>)
+    case Left(A)
+    case Right(B)
     
     /**
     A left `Either` returning `value`
@@ -27,7 +27,7 @@ public enum Either<A, B>: EitherType {
     - returns: Left
     */
     public static func left(value: A) -> Either<A, B> {
-        return Left(Box(value))
+        return Left(value)
     }
     
     /**
@@ -40,7 +40,7 @@ public enum Either<A, B>: EitherType {
     - returns: Right
     */
     public static func right(value: B) -> Either<A, B> {
-        return Right(Box(value))
+        return Right(value)
     }
     
     /// Projects this `Either` as a `Left`.
@@ -84,9 +84,9 @@ public enum Either<A, B>: EitherType {
     public func fold<X>(fa: A -> X, _ fb: B -> X) -> X {
         switch self {
         case .Left(let l):
-            return fa(l.unbox)
+            return fa(l)
         case .Right(let r):
-            return fb(r.unbox)
+            return fb(r)
         }
     }
     
@@ -189,9 +189,9 @@ extension Either: CustomStringConvertible {
     public var description: String {
         switch self {
         case .Left(let l):
-            return "Left: \(l.unbox)"
+            return "Left: \(l)"
         case .Right(let r):
-            return "Right: \(r.unbox)"
+            return "Right: \(r)"
         }
     }
 }
@@ -208,9 +208,9 @@ Equality for Either is defined by the equality of the contained types
 public func == <A, B where A: Equatable, B: Equatable>(lhs: Either<A, B>, rhs: Either<A, B>) -> Bool {
     switch (lhs, rhs) {
     case let (.Right(l), .Right(r)):
-        return l.unbox == r.unbox
+        return l == r
     case let (.Left(l), .Left(r)):
-        return l.unbox == r.unbox
+        return l == r
     default:
         return false
     }
