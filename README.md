@@ -1,15 +1,11 @@
 EitherSwift
 ===========
 
-[![Build Status](https://travis-ci.org/to4iki/EitherSwift.svg)][status]
-[![Version](https://img.shields.io/cocoapods/v/EitherSwift.svg?style=flat)][version]
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
-[![Platform](https://img.shields.io/cocoapods/p/EitherSwift.svg?style=flat)][platform]
-
-[status]: https://travis-ci.org/to4iki/EitherSwift
-[version]: http://cocoadocs.org/docsets/EitherSwift
-[license]: https://github.com/to4iki/EitherSwift/master/LICENSE
-[platform]: http://cocoadocs.org/docsets/EitherSwift
+[![Build Status][status-image]][status-url]
+[![Pods version][pod-image]][pod-url]
+[![Carthage compatible][carthage-image]][carthage-url]
+[![License][license-image]][license-url]
+[![platform][platform-image]][platform-url]
 
 Represents a value of one of two possible types (a disjoint union.)  
 Instances of Either are either an instance of Left or Right.
@@ -20,6 +16,11 @@ Swift Either type like [scala.util.Either](http://www.scala-lang.org/api/current
 ++ some in  [\/ - scalaz.\/](http://docs.typelevel.org/api/scalaz/stable/7.0.2/doc/#scalaz.$bslash$div)
 
 Take **Right Projection** is decided it would be want.
+
+## Requirements
+
+- Swift 2 or later
+- iOS 8.0 or later
 
 ## Usage
 
@@ -124,16 +125,44 @@ func isFull<T>(string: String) -> Either<T, Bool> {
 
 ## Installation
 
-### CocoaPods
+### [Carthage](https://github.com/Carthage/Carthage)
+Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile):
 
-```ruby
+```
+github "to4iki/EitherSwift"
+```
+
+Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+
+
+### [CocoaPods](http://cocoapods.org/)
+Version 0.36 or higher is required. Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
+
+```rb
 pod 'EitherSwift'
 ```
 
+Make sure that you are integrating your dependencies using frameworks: add `use_frameworks!` to your Podfile. Then run `pod install`.
+
 ## Licence
 
-[MIT](https://github.com/to4iki/EitherSwift/master/LICENSE)
+[MIT](http://to4iki.mit-license.org/)
 
 ## Author
 
 [to4iki](https://github.com/to4iki)
+
+[status-url]: https://travis-ci.org/to4iki/EitherSwift
+[status-image]: https://travis-ci.org/to4iki/EitherSwift.svg
+
+[pod-url]: http://cocoadocs.org/docsets/EitherSwift
+[pod-image]: https://img.shields.io/cocoapods/v/EitherSwift.svg?style=flat
+
+[platform-url]: http://cocoadocs.org/docsets/EitherSwift
+[platform-image]: https://img.shields.io/cocoapods/p/EitherSwift.svg?style=flat
+
+[carthage-url]: https://github.com/Carthage/Carthage
+[carthage-image]: https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat
+
+[license-url]: http://to4iki.mit-license.org/
+[license-image]: http://img.shields.io/badge/license-MIT-brightgreen.svg
